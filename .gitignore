@@ -1,0 +1,11 @@
+dist/
+temp/
+target/
+
+.idea/
+*.iml
+.vscode/
+
+node_modules/
+
+!.nvmrc
