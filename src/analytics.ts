@@ -1,8 +1,7 @@
 export function factory(oa: any) {
   if (!oa.q) return oa;
-  function analytics(...params: any[]) {
-    console.log(...params);
-  }
+  function analytics(..._params: any[]) {}
+  analytics.L = Date.now();
   for (const command of oa.q) {
     analytics(...command);
   }
