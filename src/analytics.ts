@@ -1,11 +1,10 @@
 export function factory(oa: any) {
+  if (!oa.q) return oa;
   function analytics(...params: any[]) {
     console.log(...params);
   }
-  if (oa.q) {
-    for (const command of oa.q) {
-      analytics(...command);
-    }
+  for (const command of oa.q) {
+    analytics(...command);
   }
   return analytics;
 }
