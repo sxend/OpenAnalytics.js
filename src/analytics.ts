@@ -1,4 +1,4 @@
 (function (global) {
   function analytics() {}
-  global[global.ASFAnalyticsObject || "analytics"] = analytics;
+  global[global.OpenAnalyticsObject || "analytics"] = analytics;
 })((0, eval)("this"));
