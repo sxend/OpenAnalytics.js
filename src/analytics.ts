@@ -1,4 +1,3 @@
-(function (global) {
-  function analytics() {}
-  global[global.OpenAnalyticsObject || "analytics"] = analytics;
-})((0, eval)("this"));
+export function factory(_OpenAnalyticsObject: string) {
+  return function analytics() {};
+}

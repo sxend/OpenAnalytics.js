@@ -22,7 +22,7 @@
     "prebuild": "npm-run-all clean codeformat",
     "build:tsc": "tsc --project ./tsconfig.json",
     "build:tsc:watch": "tsc --watch --project ./tsconfig.json",
-    "build:esbuild": "esbuild --bundle --minify --tsconfig=tsconfig.json --outdir=dist --sourcemap src/analytics.ts",
+    "build:esbuild": "esbuild --bundle --minify --tsconfig=tsconfig.json --outdir=dist --sourcemap src/index.ts",
     "build:esbuild:watch": "npm-watch build:esbuild",
     "build": "npm-run-all -p build:tsc build:esbuild",
     "build:watch": "npm-run-all -p codeformat build:tsc:watch build:esbuild:watch"
