@@ -9,6 +9,7 @@ export function factory(oa: any) {
       return;
     } else if (typeof headParam === "string") {
       const command = parseCommand(headParam);
+      if (!command.methodName) return;
       console.log(command);
     }
   }
@@ -19,15 +20,15 @@ export function factory(oa: any) {
   }
   return analytics;
 }
-const COMMAND_REGEX = /^(\w+.)?(\w+:)?(\w+)$/;
+const COMMAND_REGEX = /^(\w+\.)?(\w+\:)?(\w+)$/;
 function parseCommand(command: string) {
   // https://developers.google.com/analytics/devguides/collection/analyticsjs/command-queue-reference?hl=en#parameters
   const [ok, trackerName, pluginName, methodName] =
     COMMAND_REGEX.exec(command) || [];
   if (!ok) return {};
   return {
-    trackerName,
-    pluginName,
+    trackerName: trackerName?.replace(".", ""),
+    pluginName: pluginName?.replace(":", ""),
     methodName,
   };
 }
