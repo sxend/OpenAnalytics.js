@@ -1,4 +1,8 @@
 const DEFAULT_TRACKER_NAME = "t0";
+const methods: { [methodName: string]: Function } = {
+  create: create,
+};
+
 export function factory(oa: any) {
   if (!oa?.q) return oa;
   function analytics(...params: any[]) {
@@ -9,7 +13,9 @@ export function factory(oa: any) {
       return;
     } else if (typeof headParam === "string") {
       const command = parseCommand(headParam);
-      if (!command.methodName) return;
+      if (!command?.methodName) return;
+      if (!methods[command.methodName]) return;
+      methods[command.methodName](analytics, params);
       console.log(command);
     }
   }
@@ -25,10 +31,14 @@ function parseCommand(command: string) {
   // https://developers.google.com/analytics/devguides/collection/analyticsjs/command-queue-reference?hl=en#parameters
   const [ok, trackerName, pluginName, methodName] =
     COMMAND_REGEX.exec(command) || [];
-  if (!ok) return {};
+  if (!ok) return <any>{};
   return {
     trackerName: trackerName?.replace(".", ""),
     pluginName: pluginName?.replace(":", ""),
     methodName,
   };
+}
+
+function create(_oa: any, ...params: any[]) {
+  console.log(params);
 }
