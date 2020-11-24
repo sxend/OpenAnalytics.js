@@ -49,19 +49,68 @@ function parseCommand(command: string) {
 }
 class Tracker {
   constructor(public model: Model) {}
+  send(_oa: OpenAnalytics, hitType: string, ...params: any[]) {
+    params = params || [];
+    const fieldsObject = params[params.length - 1] || {};
+    fieldsObject.hitType = hitType;
+    switch (hitType) {
+      case "pageview":
+        fieldsObject.page = params[0];
+        break;
+      case "event":
+        fieldsObject.eventCategory = params[0];
+        fieldsObject.eventAction = params[1];
+        fieldsObject.eventLabel = params[2];
+        fieldsObject.eventValue = params[3];
+        break;
+      case "social":
+        fieldsObject.socialNetwork = params[0];
+        fieldsObject.socialAction = params[1];
+        fieldsObject.socialTarget = params[2];
+        break;
+      case "timing":
+        fieldsObject.timingCategory = params[0];
+        fieldsObject.timingVar = params[1];
+        fieldsObject.timingValue = params[2];
+        fieldsObject.timingLabel = params[3];
+        break;
+      default:
+        break;
+    }
+    this.beacon(fieldsObject);
+  }
+  private beacon(_param: any): void {
+    const img = document.createElement("img");
+    document.body.appendChild(img);
+  }
 }
-class Model {}
+function objToMap(obj: any): Map<string, any> {
+  const map = new Map();
+  for (const key of Object.keys(obj)) {
+    map.set(key, obj[key]);
+  }
+  return map;
+}
+class Model {
+  private map: Map<string, any> = new Map();
+  constructor(params: any) {
+    this.map = objToMap(params);
+    console.log(this.map);
+  }
+}
 
 function create(
   oa: OpenAnalytics,
-  trackingId?: string,
-  cookieDomain?: string,
-  name?: string,
+  trackingId: string,
+  cookieDomain: string,
+  name: string,
+  endpoint: string,
   fieldsObject: any = {}
 ) {
   if (oa.t[name]) return;
   fieldsObject.trackingId = trackingId;
   fieldsObject.cookieDomain = cookieDomain;
-  const model = new Model();
+  fieldsObject.endpoint = endpoint;
+  const model = new Model(fieldsObject);
   oa.t[name] = new Tracker(model);
 }
